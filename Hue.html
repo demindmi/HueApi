@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+ <head>
+  <meta charset="UTF-8">
+  <title>Controlling hue</title>
+ </head>
+
+ <body>
+
+  <script type="text/javascript">
+   // See API documentation to retrieve your own ID
+   // https://www.developers.meethue.com/documentation/getting-started
+
+   var hueIP = "10.88.111.4" // Your hue bridge IP
+   var hueID = "5Jxz2vHdPje6989HwUeJRlEnUSZigG4E89ryIkdG" // Get your ID from the hue bridge
+   // var hueLamp = "13" // the lamp to comtrol
+
+
+   function callback() { }
+
+   function send(obj) {
+    let hueLamp = document.getElementById('lamp').value;
+    console.log(hueLamp);
+    var xmlhttp = new XMLHttpRequest();
+    var url = "http://" + hueIP + "/api/" + hueID + "/lights/" + hueLamp + "/state/";
+    xmlhttp.open("PUT", url, true, callback);
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+    var parameters = JSON.stringify(obj);
+    xmlhttp.send(parameters);
+   }
+
+
+   function turnOn() {
+    send({ "on": true })
+   }
+
+   function turnOff() {
+    send({ "on": false })
+   }
+
+   function turnRed() {
+    send({
+     "colormode": "xy", "xy": [
+      0.7006,
+      0.2993
+     ]
+    })
+   }
+   function turnGreen() {
+    send({
+     "colormode": "xy", "xy": [
+      0.1724,
+      0.7468
+     ]
+    })
+   }
+   function turnBlue() {
+    send({
+     "colormode": "xy", "xy": [
+      0.1355,
+      0.0399
+     ]
+    })
+   }
+
+   function turnPink() {
+    send({ "colormode": "hue", "hue": 25400, "sat": 254 })
+   }
+   function turnPurple() {
+    send({ "colormode": "hue", "hue": 10400, "sat": 254 })
+   }
+
+
+   function turn50() {
+    send({ "bri": 127 })
+   }
+   function turn100() {
+    send({ "bri": 254 })
+   }
+
+   function turnCool() {
+    send({ "colormode": "ct", "ct": 154 })
+   }
+   function turnWarm() {
+    send({ "colormode": "ct", "ct": 500 })
+   }
+
+   function turnColor() {
+    send({ "effect": "colorloop" })
+   }
+
+  </script>
+  <input type="number" id="lamp" placeholder="13,"></input>
+  <h2>On/off:</h2>
+  <button onclick="javascript:turnOn()">On</button>
+  <button onclick="javascript:turnOff()">Off</button>
+  <br>
+  <h2>Color using xy:</h2>
+  <button onclick="javascript:turnRed()">Red</button>
+  <button onclick="javascript:turnGreen()">Green</button>
+  <button onclick="javascript:turnBlue()">Blue</button>
+  <br>
+  <h2>Color using hue:</h2>
+  <button onclick="javascript:turnPink()">Pink</button>
+  <button onclick="javascript:turnPurple()">Purple</button>
+  <br>
+  <h2>Brightness:</h2>
+  <button onclick="javascript:turn50()">50%</button>
+  <button onclick="javascript:turn100()">100%</button>
+  <br>
+  <h2>Warm/cold light:</h2>
+  <button onclick="javascript:turnCool()">Cool</button>
+  <button onclick="javascript:turnWarm()">Warm</button>
+  <br>
+  <!-- <button onclick="javascript:turnColor()">Color loop</button> -->
+
+
+ </body>
+
+</html>
